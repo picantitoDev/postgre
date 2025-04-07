@@ -16,8 +16,27 @@ async function createUsernamePost(req, res) {
   res.redirect("/")
 }
 
+async function searchUsernameGet(word) {
+  const usernames = await db.getUsernamesMatching(word)
+  return usernames.map((user) => user.username)
+}
+
+async function handleHomePage(req, res) {
+  const query = req.query.search
+  const users = query ? await searchUsernameGet(query) : await getUsernames()
+  res.render("index", { users })
+}
+
+async function deleteUsernames(req, res) {
+  await db.deleteUsernames()
+  res.send("All data has been deleted")
+}
+
 module.exports = {
+  deleteUsernames,
   getUsernames,
+  handleHomePage,
   createUsernameGet,
   createUsernamePost,
+  searchUsernameGet,
 }

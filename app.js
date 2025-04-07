@@ -8,13 +8,13 @@ app.use(express.urlencoded({ extended: true }))
 
 const usernameController = require("./controllers/usernameController")
 const usernameRouter = require("./routes/usernameRouter")
+const deleteUsernameRouter = require("./routes/deleteUsernameRouter")
 
-app.get("/", async (req, res) => {
-  const users = await usernameController.getUsernames() // returns array of usernames
-  res.render("index", { users })
-})
+app.get("/", usernameController.handleHomePage)
 
 app.use("/new", usernameRouter)
+
+app.use("/delete", deleteUsernameRouter)
 
 app.listen(8080, () => {
   console.log("Running on localhost...")
